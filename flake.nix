@@ -25,101 +25,108 @@
         pkg-config
         pkgconf
         valgrind
-        sparse
         clang-tools # clangd is here
       ];
 
       common = with pkgs; [
-	git
+        git
         fish
         nvim.packages.${system}.default
       ];
-
-      shell =
-        env: name: pkgs:
-        env.mkDerivation {
-          name = name;
-          buildInputs = pkgs ++ common;
-        };
 
     in
     with pkgs;
     {
       devShells.${system} = {
-        rust = shell stdenvNoCC "rust" (
-          with pkgs;
-          [
-            cargo
-            rustc
-            rustfmt
-            rust-analyzer
-            clippy
-            bacon
-	    irust
-          ] ++ self.devShells.${system}.cllvm.buildInputs
-        );
+        rust = mkShell.override { stdenv = pkgs.clangStdenv; } {
+          packages =
+            with pkgs;
+            [
+              cargo
+              rustc
+              rustfmt
+              rust-analyzer
+              clippy
+              bacon
+              irust
+            ]
+            ++ common;
+        };
 
-        cllvm = shell clangStdenv "cllvm" (
-          with pkgs;
-          [
-            clang
-            clang-analyzer
-            llvm
-            lldb
-          ]
-          ++ cTools
-        );
+        cllvm = mkShell.override { stdenv = pkgs.clangStdenv; } {
+          packages =
+            with pkgs;
+            [
+              clang-analyzer
+              llvm
+              lldb
+            ]
+            ++ cTools
+            ++ common;
+        };
 
-        cgnu = shell gccStdenv "cgnu" (
-          with pkgs;
-          [
-            gdb
-            binutils
-          ]
-          ++ cTools
-        );
+        cgnu = mkShell {
+          packages =
+            with pkgs;
+            [
+              gdb
+              binutils
+            ]
+            ++ cTools
+            ++ common;
+        };
 
-        lua = shell stdenvNoCC "lua" (
-          with pkgs;
-          [
-            lua
-            lua-language-server
-          ]
-        );
+        lua = mkShell {
+          packages =
+            with pkgs;
+            [
+              lua
+              lua-language-server
+            ]
+            ++ common;
+        };
 
-        haskell = shell stdenvNoCC "haskell" (
-          with pkgs;
-          [
-            ghc
-            cabal-install
-            haskell-language-server
-          ]
-        );
+        haskell = mkShell {
+          packages =
+            with pkgs;
+            [
+              ghc
+              cabal-install
+              haskell-language-server
+            ]
+            ++ common;
+        };
 
-        nix = shell stdenvNoCC "nix" (
-          with pkgs;
-          [
-            nixfmt-rfc-style
-            nixd
-          ]
-        );
+        nix = mkShell {
+          packages =
+            with pkgs;
+            [
+              nixfmt-rfc-style
+              nixd
+            ]
+            ++ common;
+        };
 
-        python3 = shell stdenvNoCC "python3" (
-          with pkgs;
-          [
-            python3
-            pyright
-          ]
-        );
+        python3 = mkShell {
+          packages =
+            with pkgs;
+            [
+              python3
+              pyright
+            ]
+            ++ common;
+        };
 
-        cSharp = shell stdenvNoCC "cSharp" (
-          with pkgs;
-          [
-            dotnet-sdk
-            csharp-ls
-            csharprepl
-          ]
-        );
+        cSharp = mkShell {
+          packages =
+            with pkgs;
+            [
+              dotnet-sdk
+              csharp-ls
+              csharprepl
+            ]
+            ++ common;
+        };
       };
     };
 }
