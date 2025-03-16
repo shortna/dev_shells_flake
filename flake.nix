@@ -56,7 +56,7 @@
             clippy
             bacon
 	    irust
-          ]
+          ] ++ self.devShells.${system}.cllvm.buildInputs
         );
 
         cllvm = shell clangStdenv "cllvm" (
