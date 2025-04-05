@@ -59,7 +59,8 @@
             [
               clang-analyzer
               llvm
-              lldb
+              lldb_20
+	      llvmPackages_20.lldbPlugins.llef
             ]
             ++ cTools
             ++ common;
@@ -70,6 +71,7 @@
             with pkgs;
             [
               gdb
+	      gef
               binutils
             ]
             ++ cTools
