@@ -49,6 +49,7 @@
               clippy
               bacon
               irust
+	      lldb_20
             ]
             ++ common;
         };
@@ -82,6 +83,8 @@
           packages =
             with pkgs;
             [
+	      fennel
+	      fennel-ls
               lua
               lua-language-server
             ]
