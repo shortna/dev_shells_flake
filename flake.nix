@@ -32,6 +32,7 @@
         git
         fish
         nvim.packages.${system}.default
+	readline
       ];
 
     in
@@ -87,6 +88,8 @@
 	      fennel-ls
               lua
               lua-language-server
+	      fnlfmt
+	      lua52Packages.readline
             ]
             ++ common;
         };
