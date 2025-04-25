@@ -32,7 +32,7 @@
         git
         fish
         nvim.packages.${system}.default
-	readline
+        readline
       ];
 
     in
@@ -50,7 +50,7 @@
               clippy
               bacon
               irust
-	      lldb_20
+              lldb_20
             ]
             ++ common;
         };
@@ -62,7 +62,7 @@
               clang-analyzer
               llvm
               lldb_20
-	      llvmPackages_20.lldbPlugins.llef
+              llvmPackages_20.lldbPlugins.llef
             ]
             ++ cTools
             ++ common;
@@ -73,7 +73,7 @@
             with pkgs;
             [
               gdb
-	      gef
+              gef
               binutils
             ]
             ++ cTools
@@ -84,12 +84,12 @@
           packages =
             with pkgs;
             [
-	      fennel
-	      fennel-ls
+              fennel
+              fennel-ls
               lua
               lua-language-server
-	      fnlfmt
-	      lua52Packages.readline
+              fnlfmt
+              lua52Packages.readline
             ]
             ++ common;
         };
@@ -125,11 +125,23 @@
             ++ common;
         };
 
+        kotlin = mkShell {
+          packages =
+            with pkgs;
+            [
+              kotlin
+	      gradle
+	      jetbrains.idea-community
+            ]
+            ++ common;
+        };
+
+        # delete later
         cSharp = mkShell {
           packages =
             with pkgs;
             [
-              dotnet-sdk
+	      dotnet-sdk
               csharp-ls
               csharprepl
             ]
