@@ -125,18 +125,19 @@
             ++ common;
         };
 
-        kotlin = mkShell {
+
+        # delete later
+        js = mkShell {
           packages =
             with pkgs;
             [
-              kotlin
-	      gradle
-	      jetbrains.idea-community
+	      nodejs
+	      nodePackages.live-server
+	      nodePackages.typescript-language-server
             ]
             ++ common;
         };
 
-        # delete later
         cSharp = mkShell {
           packages =
             with pkgs;
