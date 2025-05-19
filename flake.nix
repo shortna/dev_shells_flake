@@ -29,6 +29,7 @@
       ];
 
       common = with pkgs; [
+	jq
         git
         fish
         nvim.packages.${system}.default
@@ -51,6 +52,7 @@
               bacon
               irust
               lldb_20
+	      lld
             ]
             ++ common;
         };
@@ -63,6 +65,7 @@
               llvm
               lldb_20
               llvmPackages_20.lldbPlugins.llef
+	      lld
             ]
             ++ cTools
             ++ common;
