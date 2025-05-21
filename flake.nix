@@ -87,12 +87,8 @@
           packages =
             with pkgs;
             [
-              fennel
-              fennel-ls
               lua
               lua-language-server
-              fnlfmt
-              lua52Packages.readline
             ]
             ++ common;
         };
@@ -124,30 +120,6 @@
             [
               python3
               pyright
-            ]
-            ++ common;
-        };
-
-
-        # delete later
-        js = mkShell {
-          packages =
-            with pkgs;
-            [
-	      nodejs
-	      nodePackages.live-server
-	      nodePackages.typescript-language-server
-            ]
-            ++ common;
-        };
-
-        cSharp = mkShell {
-          packages =
-            with pkgs;
-            [
-	      dotnet-sdk
-              csharp-ls
-              csharprepl
             ]
             ++ common;
         };
