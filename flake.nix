@@ -26,10 +26,12 @@
         pkgconf
         valgrind
         clang-tools # clangd is here
+
+        clang-manpages
       ];
 
       common = with pkgs; [
-	jq
+        jq
         git
         fish
         nvim.packages.${system}.default
@@ -40,7 +42,7 @@
     with pkgs;
     {
       devShells.${system} = {
-        rust = mkShell.override { stdenv = pkgs.clangStdenv; } {
+        rust = mkShell.override { stdenv = pkgs.llvmPackages_20.libcxxStdenv; } {
           packages =
             with pkgs;
             [
@@ -52,20 +54,18 @@
               bacon
               irust
               lldb_20
-	      lld
+	      llvmPackages_20.bintools
             ]
             ++ common;
         };
 
-        cllvm = mkShell.override { stdenv = pkgs.clangStdenv; } {
+        cllvm = mkShell.override { stdenv = pkgs.llvmPackages_20.libcxxStdenv; } {
           packages =
             with pkgs;
             [
               clang-analyzer
-              llvm
               lldb_20
-              llvmPackages_20.lldbPlugins.llef
-	      lld
+	      llvmPackages_20.bintools
             ]
             ++ cTools
             ++ common;
