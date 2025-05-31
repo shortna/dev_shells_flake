@@ -36,6 +36,7 @@
         fish
         nvim.packages.${system}.default
         readline
+	tokei
       ];
 
     in
@@ -100,6 +101,7 @@
               ghc
               cabal-install
               haskell-language-server
+              ghcid
             ]
             ++ common;
         };
