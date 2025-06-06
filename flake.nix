@@ -26,8 +26,6 @@
         pkgconf
         valgrind
         clang-tools # clangd is here
-
-        clang-manpages
       ];
 
       common = with pkgs; [
@@ -36,94 +34,83 @@
         fish
         nvim.packages.${system}.default
         readline
-	tokei
+        tokei
       ];
 
+      shell =
+        { packages, stdenv }:
+        pkgs.mkShell.override { stdenv = stdenv; } {
+          packages = packages ++ common;
+        };
+
     in
-    with pkgs;
     {
       devShells.${system} = {
-        rust = mkShell.override { stdenv = pkgs.llvmPackages_20.libcxxStdenv; } {
-          packages =
-            with pkgs;
-            [
-              cargo
-              rustc
-              rustfmt
-              rust-analyzer
-              clippy
-              bacon
-              irust
-              lldb_20
-	      llvmPackages_20.bintools
-            ]
-            ++ common;
+        rust = shell {
+          packages = [
+            pkgs.cargo
+            pkgs.rustc
+            pkgs.rustfmt
+            pkgs.rust-analyzer
+            pkgs.clippy
+            pkgs.bacon
+            pkgs.irust
+            pkgs.lldb_20
+            pkgs.llvmPackages_20.bintools
+          ];
+          stdenv = pkgs.llvmPackages_20.libcxxStdenv;
         };
 
-        cllvm = mkShell.override { stdenv = pkgs.llvmPackages_20.libcxxStdenv; } {
-          packages =
-            with pkgs;
-            [
-              clang-analyzer
-              lldb_20
-	      llvmPackages_20.bintools
-            ]
-            ++ cTools
-            ++ common;
+        cllvm = shell {
+          packages = [
+            pkgs.clang-analyzer
+            pkgs.lldb_20
+            pkgs.llvmPackages_20.bintools
+          ] ++ cTools;
+          stdenv = pkgs.llvmPackages_20.libcxxStdenv;
         };
 
-        cgnu = mkShell {
-          packages =
-            with pkgs;
-            [
-              gdb
-              gef
-              binutils
-            ]
-            ++ cTools
-            ++ common;
+        cgnu = shell {
+          packages = [
+            pkgs.gdb
+            pkgs.gef
+            pkgs.binutils
+          ] ++ cTools;
+          stdenv = pkgs.gccStdenv;
         };
 
-        lua = mkShell {
-          packages =
-            with pkgs;
-            [
-              lua
-              lua-language-server
-            ]
-            ++ common;
+        lua = shell {
+          packages = [
+            pkgs.lua
+            pkgs.lua-language-server
+          ];
+          stdenv = pkgs.stdenv;
         };
 
-        haskell = mkShell {
-          packages =
-            with pkgs;
-            [
-              ghc
-              cabal-install
-              haskell-language-server
-              ghcid
-            ]
-            ++ common;
+        haskell = shell {
+          packages = [
+            pkgs.ghc
+            pkgs.cabal-install
+            pkgs.haskell-language-server
+            pkgs.ghcid
+          ];
+          stdenv = pkgs.stdenv;
         };
 
-        nix = mkShell {
-          packages =
-            with pkgs;
-            [
-              nixfmt-rfc-style
-              nixd
-            ]
-            ++ common;
+        nix = shell {
+          packages = [
+            pkgs.nixfmt-rfc-style
+            pkgs.nixd
+          ];
+          stdenv = pkgs.stdenv;
         };
 
-        python3 = mkShell {
-          packages =
-            with pkgs;
-            [
-              python3
-              pyright
-            ]
-            ++ common;
+        python3 = shell {
+          packages = [
+            pkgs.python3
+            pkgs.pyright
+          ];
+          stdenv = pkgs.stdenv;
         };
       };
     };
