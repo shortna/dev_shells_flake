@@ -25,7 +25,7 @@
         pkg-config
         pkgconf
         valgrind
-        clang-tools # clangd is here
+        llvmPackages_20.clang-tools # clangd is here
       ];
 
       common = with pkgs; [
@@ -38,15 +38,17 @@
       ];
 
       shell =
-        { packages, stdenv }:
-        pkgs.mkShell.override { stdenv = stdenv; } {
-          packages = packages ++ common;
+        { name, packages, env }:
+        env.mkDerivation {
+          name = name;
+          nativeBuildInputs = packages ++ common;
         };
 
     in
     {
       devShells.${system} = {
         rust = shell {
+          name = "rust";
           packages = [
             pkgs.cargo
             pkgs.rustc
@@ -58,59 +60,65 @@
             pkgs.lldb_20
             pkgs.llvmPackages_20.bintools
           ];
-          stdenv = pkgs.llvmPackages_20.libcxxStdenv;
+          env = pkgs.llvmPackages_20.stdenv;
         };
 
         cllvm = shell {
+          name = "cllvm";
           packages = [
             pkgs.clang-analyzer
             pkgs.lldb_20
             pkgs.llvmPackages_20.bintools
           ] ++ cTools;
-          stdenv = pkgs.llvmPackages_20.libcxxStdenv;
+          env = pkgs.llvmPackages_20.stdenv;
         };
 
         cgnu = shell {
+          name = "cgnu";
           packages = [
             pkgs.gdb
             pkgs.gef
             pkgs.binutils
           ] ++ cTools;
-          stdenv = pkgs.gccStdenv;
+          env = pkgs.gccStdenv;
         };
 
         lua = shell {
+          name = "lua";
           packages = [
             pkgs.lua
             pkgs.lua-language-server
           ];
-          stdenv = pkgs.stdenv;
+          env = pkgs.stdenv;
         };
 
         haskell = shell {
+          name = "haskell";
           packages = [
             pkgs.ghc
             pkgs.cabal-install
             pkgs.haskell-language-server
             pkgs.ghcid
           ];
-          stdenv = pkgs.stdenv;
+          env = pkgs.stdenv;
         };
 
         nix = shell {
+          name = "nix";
           packages = [
             pkgs.nixfmt-rfc-style
             pkgs.nixd
           ];
-          stdenv = pkgs.stdenv;
+          env = pkgs.stdenv;
         };
 
         python3 = shell {
+          name = "python3";
           packages = [
             pkgs.python3
             pkgs.pyright
           ];
-          stdenv = pkgs.stdenv;
+          env = pkgs.stdenv;
         };
       };
     };
